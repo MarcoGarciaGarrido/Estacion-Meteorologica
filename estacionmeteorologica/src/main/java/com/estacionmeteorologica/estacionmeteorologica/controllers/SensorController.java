@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 
 import com.estacionmeteorologica.estacionmeteorologica.dto.SensorDTO;
 import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
-import com.estacionmeteorologica.estacionmeteorologica.services.historicValue.HistoricValueService;
 import com.estacionmeteorologica.estacionmeteorologica.services.sensor.SensorService;
 
 import jakarta.validation.Valid;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SensorController {
 
     private final SensorService sensorService;
-    private final HistoricValueService historicValueService;
 
     @GetMapping
     public ResponseEntity<Iterable<Sensor>> sensorList(){
@@ -61,7 +59,6 @@ public class SensorController {
     @DeleteMapping("/{idSensor}")
     public ResponseEntity<?> deleteSensor(@PathVariable("idSensor") Long id) {
         try {
-            historicValueService.deleteHistoricValuesWithSensorId(id);
             sensorService.deleteSensor(id);
             return new ResponseEntity<>("Sensor eliminado satisfactoriamente", HttpStatus.OK);            
         } catch (IllegalArgumentException e) {

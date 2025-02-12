@@ -24,7 +24,6 @@ import org.hamcrest.Matchers;
 import com.estacionmeteorologica.estacionmeteorologica.dto.SensorDTO;
 import com.estacionmeteorologica.estacionmeteorologica.models.Magnitude;
 import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
-import com.estacionmeteorologica.estacionmeteorologica.services.historicValue.HistoricValueService;
 import com.estacionmeteorologica.estacionmeteorologica.services.sensor.SensorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,15 +38,12 @@ public class SensorControllerTest {
     @MockitoBean
     private SensorService sensorService;
 
-    @MockitoBean
-    private HistoricValueService historicValueService;
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp(){
-        mockMvc = MockMvcBuilders.standaloneSetup(new SensorController(sensorService, historicValueService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new SensorController(sensorService)).build();
     }
 
     @Test

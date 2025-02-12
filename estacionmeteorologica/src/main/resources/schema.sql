@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS historic_value (
     valor FLOAT,
     measure_date Date,
     sensor_id INT,
-    FOREIGN KEY (sensor_id) REFERENCES sensor(id)
+    FOREIGN KEY (sensor_id) REFERENCES sensor(id) on delete cascade
 );
