@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "516ef76b-a251-4128-a4ef-18a5b0bb9aea",
+		"name": "EstacionMeteorologica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22619458",
+		"_collection_link": "https://planetary-resonance-74658.postman.co/workspace/My-Workspace~e85f79d7-3b69-4f7d-85ce-46df036240ac/collection/22619458-516ef76b-a251-4128-a4ef-18a5b0bb9aea?action=share&source=collection_link&creator=22619458"
+	},
+	"item": [
+		{
+			"name": "Sensor List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sensores",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Value From Sensor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sensores/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get HistoricValues By SensorId And MeasureDate Between",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sensores/1/media/2025-02-01/2025-02-10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores",
+						"1",
+						"media",
+						"2025-02-01",
+						"2025-02-10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get HistoricValues By SensorId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sensores/1/histórico",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores",
+						"1",
+						"histórico"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Sensor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"magnitude\": \"PREASURE\",\r\n    \"valor\": \"1223434\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sensores",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Sensor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sensores/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sensores",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
