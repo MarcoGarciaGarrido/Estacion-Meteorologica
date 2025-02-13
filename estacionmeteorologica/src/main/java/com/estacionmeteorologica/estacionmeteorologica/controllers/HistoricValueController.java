@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.estacionmeteorologica.estacionmeteorologica.services.historicValue.HistoricValueService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 
@@ -23,6 +29,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/sensores")
+@Tag(name = "Controlador de valores historicos",  description = "Endpoints encargados de gestionar los valores históricos")
 public class HistoricValueController {
     private final HistoricValueService historicValueService;
 
@@ -34,6 +41,10 @@ public class HistoricValueController {
      * @param finalDate fecha final de los valores por los que se hace la media
      * @return devuelve una respuesta Http completa, con la media
      */
+    @Operation(summary = "Devuelve la media historica de un sesor",
+    description = "Proporciona una media, con los valores históricos de un sensor comprendidos, entre dos fechas",
+    responses = {@ApiResponse(responseCode = "200", description = "Valor de la media", 
+        content = @Content(schema = @Schema(implementation = Double.class)))})
     @GetMapping("/{idSensor}/media/{fechaInincio}/{fechaFin}")
     public ResponseEntity<Optional<Double>> getHistoricValuesBySensorIdAndMeasureDateBetween(@PathVariable("idSensor") Long id, @PathVariable("fechaInincio") @DateTimeFormat(pattern = "yyyy-MM-dd") Date initialDate, @PathVariable("fechaFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date finalDate) {
         return new ResponseEntity<>(historicValueService.getAverageValueBySensorIdAndMeasureDateBetween(id, initialDate, finalDate), HttpStatus.OK);
@@ -44,6 +55,10 @@ public class HistoricValueController {
      * @param id id del sensor
      * @return devuelve una respuesta Http completa, con la lista de historicos
      */
+    @Operation(summary = "Proporciona una lista de valores del histórico",
+    description = "Devuelve la lista de valores del histórico de un sensor",
+    responses = {@ApiResponse(responseCode = "200", description = "Lista de valores del histórico", 
+        content = @Content(array = @ArraySchema(schema = @Schema(implementation = Float.class))))})
     @GetMapping("/{idSensor}/histórico")
     public ResponseEntity<List<Float>> getHistoricValuesBySensorId(@PathVariable("idSensor") Long id) {
         return new ResponseEntity<>(historicValueService.getHistoricValues(id), HttpStatus.OK);
