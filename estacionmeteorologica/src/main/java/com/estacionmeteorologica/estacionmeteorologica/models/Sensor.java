@@ -3,11 +3,14 @@ package com.estacionmeteorologica.estacionmeteorologica.models;
 import java.util.List;
 import java.util.Random;
 
+import com.estacionmeteorologica.estacionmeteorologica.dto.SensorDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,7 +54,7 @@ public class Sensor {
      * en caso de ser eliminado el sensor, estos
      * también serán eliminado
      */
-    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<HistoricValue> historicValues;
 
     public Sensor(Long id) {
@@ -79,5 +82,11 @@ public class Sensor {
      */
     public float generateValue() {
         return new Random().nextFloat(this.magnitude.getMinValue(), this.magnitude.getMaxValue());
+    }
+
+
+    @Override
+    public String toString() {
+        return new SensorDTO(this).toString();
     }
 }

@@ -1,6 +1,8 @@
 package com.estacionmeteorologica.estacionmeteorologica.controllers;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.BindingResult;
 
 import com.estacionmeteorologica.estacionmeteorologica.dto.SensorDTO;
-import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
 import com.estacionmeteorologica.estacionmeteorologica.services.sensor.SensorService;
 
 import jakarta.validation.Valid;
@@ -31,11 +32,17 @@ public class SensorController {
     private final SensorService sensorService;
     /**
      * Método encargado de listar todos los sensores
-     * @return Lista con todos los sensores
+     * @return Lista con todos los sensores en formato DTO
      */
     @GetMapping
-    public ResponseEntity<Iterable<Sensor>> sensorList(){
-        return new ResponseEntity<>(sensorService.getAllSensors(), HttpStatus.OK);
+    public ResponseEntity<?> sensorList(){
+        Iterable<SensorDTO> sensorDTOIterable = StreamSupport
+            .stream(sensorService.getAllSensors().spliterator(), false)
+            .map(SensorDTO::new)
+            .collect(Collectors.toList());
+        
+
+        return new ResponseEntity<>(sensorDTOIterable, HttpStatus.OK);
     }
 
     /**
@@ -46,7 +53,7 @@ public class SensorController {
     @GetMapping("/{idSensor}")
     public ResponseEntity<?> getValueFromSensor(@PathVariable("idSensor") Long id) {
         try {
-            return new ResponseEntity<>(sensorService.getValueOfSensorById(id), HttpStatus.OK);            
+            return new ResponseEntity<>(sensorService.getValueOfSensorById(id).get(), HttpStatus.OK);            
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -66,7 +73,7 @@ public class SensorController {
             return new ResponseEntity<>(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
         try {
-            return new ResponseEntity<>(sensorService.createSensor(sensorDTO), HttpStatus.CREATED);
+            return new ResponseEntity<>(new SensorDTO(sensorService.createSensor(sensorDTO)), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

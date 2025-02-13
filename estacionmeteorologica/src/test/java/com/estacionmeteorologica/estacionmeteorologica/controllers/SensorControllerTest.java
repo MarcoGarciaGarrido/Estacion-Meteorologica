@@ -58,7 +58,11 @@ public class SensorControllerTest {
     @Test
     public void testSensorList() throws Exception{
 
-        BDDMockito.given(sensorService.getAllSensors()).willReturn (IterableUtil.iterable(new Sensor(), new Sensor(), new Sensor()));
+        BDDMockito.given(sensorService.getAllSensors())
+            .willReturn (IterableUtil.iterable(
+                new Sensor(Magnitude.CELSIOUS,20),
+                new Sensor(Magnitude.PERCENTAJE,20),
+                new Sensor(Magnitude.SPEED,20)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/sensores"))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -87,8 +91,8 @@ public class SensorControllerTest {
      */
     @Test
     public void testCreateSensor() throws Exception{
-        SensorDTO sensorDTO = new SensorDTO(Magnitude.PREASURE, 1000f);
-        Sensor sensor = new Sensor(Magnitude.PREASURE, 100f);
+        SensorDTO sensorDTO = new SensorDTO(Magnitude.PREASURE, 990f);
+        Sensor sensor = new Sensor(Magnitude.PREASURE, 990f);
 
         BDDMockito.given(sensorService.createSensor(any(SensorDTO.class))).willReturn(sensor);
 
