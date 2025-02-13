@@ -65,10 +65,10 @@ public class SensorController {
     responses = {
         @ApiResponse(responseCode = "200", description = "Sensor del parámetro", 
             content = @Content(schema = @Schema(implementation = Sensor.class))),
-        @ApiResponse(responseCode = "400", description = "Datos mal introducidos", 
+        @ApiResponse(responseCode = "400", description = "Sensor no existente", 
             content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "404", description = "Sensor no existente", 
-                content = @Content(schema = @Schema(implementation = String.class)))})
+        @ApiResponse(responseCode = "500", description = "Error inesperado", 
+            content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/{idSensor}")
     public ResponseEntity<?> getValueFromSensor(@PathVariable("idSensor") Long id) {
         try {
@@ -76,7 +76,7 @@ public class SensorController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -93,7 +93,7 @@ public class SensorController {
             content = @Content(schema = @Schema(implementation = Sensor.class))),
         @ApiResponse(responseCode = "400", description = "Datos mal introducidos", 
             content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "502", description = "Perdida conexión", 
+            @ApiResponse(responseCode = "500", description = "Error inesperado", 
                 content = @Content(schema = @Schema(implementation = String.class)))})
     @PostMapping
     public ResponseEntity<?> createSensor(@Valid @RequestBody SensorDTO sensorDTO, BindingResult bindingResult) {
@@ -103,7 +103,7 @@ public class SensorController {
         try {
             return new ResponseEntity<>(new SensorDTO(sensorService.createSensor(sensorDTO)), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -120,7 +120,7 @@ public class SensorController {
             content = @Content(schema = @Schema(implementation = String.class))),
         @ApiResponse(responseCode = "400", description = "Datos mal introducidos", 
             content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "502", description = "Perdida conexión", 
+            @ApiResponse(responseCode = "500", description = "Error inesperado", 
                 content = @Content(schema = @Schema(implementation = String.class)))})
     @DeleteMapping("/{idSensor}")
     public ResponseEntity<String> deleteSensor(@PathVariable("idSensor") Long id) {
@@ -130,7 +130,7 @@ public class SensorController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -2,6 +2,7 @@ package com.estacionmeteorologica.estacionmeteorologica.controllers;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 
@@ -44,10 +46,21 @@ public class HistoricValueController {
     @Operation(summary = "Devuelve la media historica de un sesor",
     description = "Proporciona una media, con los valores históricos de un sensor comprendidos, entre dos fechas",
     responses = {@ApiResponse(responseCode = "200", description = "Valor de la media", 
-        content = @Content(schema = @Schema(implementation = Double.class)))})
+        content = @Content(schema = @Schema(implementation = Double.class))),
+        @ApiResponse(responseCode = "400", description = "Datos mal introducidos", 
+            content = @Content(schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "404", description = "Sensor no existente", 
+            content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{idSensor}/media/{fechaInincio}/{fechaFin}")
-    public ResponseEntity<Optional<Double>> getHistoricValuesBySensorIdAndMeasureDateBetween(@PathVariable("idSensor") Long id, @PathVariable("fechaInincio") @DateTimeFormat(pattern = "yyyy-MM-dd") Date initialDate, @PathVariable("fechaFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date finalDate) {
+    public ResponseEntity<?> getHistoricValuesBySensorIdAndMeasureDateBetween(@PathVariable("idSensor") Long id, @PathVariable("fechaInincio") @DateTimeFormat(pattern = "yyyy-MM-dd") Date initialDate, @PathVariable("fechaFin") @DateTimeFormat(pattern = "yyyy-MM-dd") Date finalDate) {
+        try {
         return new ResponseEntity<>(historicValueService.getAverageValueBySensorIdAndMeasureDateBetween(id, initialDate, finalDate), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -57,11 +70,23 @@ public class HistoricValueController {
      */
     @Operation(summary = "Proporciona una lista de valores del histórico",
     description = "Devuelve la lista de valores del histórico de un sensor",
-    responses = {@ApiResponse(responseCode = "200", description = "Lista de valores del histórico", 
-        content = @Content(array = @ArraySchema(schema = @Schema(implementation = Float.class))))})
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Lista de valores del histórico", 
+        content = @Content(array = @ArraySchema(schema = @Schema(implementation = Float.class)))),
+        @ApiResponse(responseCode = "400", description = "Datos mal introducidos", 
+            content = @Content(schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "404", description = "Sensor no existente", 
+            content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{idSensor}/histórico")
-    public ResponseEntity<List<Float>> getHistoricValuesBySensorId(@PathVariable("idSensor") Long id) {
-        return new ResponseEntity<>(historicValueService.getHistoricValues(id), HttpStatus.OK);
+    public ResponseEntity<?> getHistoricValuesBySensorId(@PathVariable("idSensor") Long id) {
+        try {
+            return new ResponseEntity<>(historicValueService.getHistoricValues(id), HttpStatus.OK);            
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
 
