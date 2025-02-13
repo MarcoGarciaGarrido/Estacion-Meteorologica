@@ -28,6 +28,9 @@ import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
 import com.estacionmeteorologica.estacionmeteorologica.repository.SensorRepository;
 import com.estacionmeteorologica.estacionmeteorologica.services.sensor.SensorService;
 
+/**
+ * Clase encargada de las pruebas de {@link SensorService}
+ */
 @DisplayName("Sensor Service Test")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +47,10 @@ public class SensorServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Test encargado de comprobar que se obtienen todos los sensores
+     * de manera correcta
+     */
     @Test
     public void testGetAllSensors() {
         Iterable<Sensor> sensors = Arrays.asList(new Sensor(), new Sensor(), new Sensor());
@@ -58,6 +65,10 @@ public class SensorServiceTest {
         verify(sensorRepository).findAll();
     }
 
+    /**
+     * Test encargado de comprobar que se obtiene el valor de un sensor
+     * foltrando por id
+     */
     @Test
     public void testGetValueOfSensorById() {
         
@@ -74,6 +85,9 @@ public class SensorServiceTest {
         verify(sensorRepository).findById(id);
     }
 
+    /**
+     * Test para comprobar que se crea correctamente un sensor
+     */
     @Test
     public void testCreateSensor(){
 
@@ -92,13 +106,21 @@ public class SensorServiceTest {
         verify(sensorRepository, times(1)).existsSensorByMagnitude(sensorDTO.getMagnitude());
     }
 
+     /**
+     * Test para comprobar que salta correctamente la excepción
+     * en caso de intentar eliminar in sensor in existente
+     */
     @Test
     public void deleteSensorFail(){     
         assertThrows(IllegalArgumentException.class,() -> sensorService.deleteSensor(1l));
     }
 
+    /**
+     * Test encargado de revisar que se elimina correctamente el sensor en 
+     * base a un id
+     */
     @Test
-    void testDeleteSensor_WhenSensorExists() {
+    void testDeleteSensorWhenSensorExists() {
         Long sensorId = 1L;
 
         when(sensorRepository.existsById(sensorId)).thenReturn(true);

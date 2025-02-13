@@ -23,6 +23,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.estacionmeteorologica.estacionmeteorologica.services.historicValue.HistoricValueService;
 
+/**
+ * Clase encargada de las pruebas de {@link HistoricValueController}
+ */
 @DisplayName("Historic Value Controller Test")
 @WebMvcTest(HistoricValueController.class)
 @AutoConfigureMockMvc
@@ -40,6 +43,11 @@ public class HistoricValueControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new HistoricValueController(historicValueService)).build();
     }
 
+    /**
+     * Test encargado de obtener una lista de valores históricos de un 
+     * sensor, en el periodo comprendido entre dos fechas
+     * @throws Exception
+     */
     @Test
     public void testGetHistoricValuesBySensorIdAndMeasureDateBetween() throws Exception{
     Long id = 1L;
@@ -61,6 +69,11 @@ public class HistoricValueControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk()) ;
     }
 
+    /**
+     * Test encargado de verificar que se obtienen los valores
+     * de los historicos de un sensor correctamente
+     * @throws Exception
+    */
     @Test
     public void testGetHistoricValuesBySensorId() throws Exception{
 

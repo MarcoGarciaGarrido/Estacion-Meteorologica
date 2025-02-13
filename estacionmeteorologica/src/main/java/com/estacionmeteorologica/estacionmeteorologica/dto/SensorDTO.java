@@ -9,24 +9,46 @@ import lombok.Setter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+/**
+ * Objeto de transferencia de datos del Sensor
+ */
 @NoArgsConstructor
 @Getter
 @Setter
 public class SensorDTO {
 
+    /**
+     * Id del Sensor
+     */
     @Positive(message = "El id nunca puede ser inferior a 0")
     private Long id;
-
+    /**
+     * Magnitud del Sensor
+     */
     @NotNull(message = "El campo de Magnitud es requerido")
     private Magnitude magnitude;
 
+    /**
+     * Valor actual del Sensor
+     */
     private float valor;
 
+    /**
+     * Constructor global del sensor, además de construir el objeto se asegura
+     * de que el valor cumpla los parámetros
+     * 
+     * @param magnitude Magnitud que mide el sensor
+     * @param valor Valor que marca el sensor
+     */
     public SensorDTO(@NotNull(message = "El campo de Magnitud es requerido") Magnitude magnitude, float valor) {
         this.magnitude = magnitude;
         this.setValor(valor);
     }
 
+    /**
+     * Metodo facilitador de convertir SensorDTO en un Sensor
+     * @return devuelve un sensor que encaja con los valores
+     */
     public Sensor extractSensor() {
         Sensor sensor = new Sensor();
         sensor.setMagnitude(magnitude);
@@ -35,12 +57,24 @@ public class SensorDTO {
         return sensor;
     }
 
+    /**
+     * Método encargado fijar el valor del sensor y además comprueba 
+     * que cumpla los parámetros
+     * @param valor valor a fijar
+     */
     public void setValor(float valor) {
         validValor(valor);
         this.valor = valor;
     }
 
-    public boolean validValor(float valor) {
+    /**
+     * Método encargado de comprobar que el valor entre en los parámetros
+     * establecidos, en caso de lo contraró devuelve un error
+     * 
+     * @param valor valor por evaluar entre los valores de la Magnitud
+     * del sensor
+     */
+    public void validValor(float valor) {
 
         float maxValue = this.getMagnitude().getMaxValue();
         float minValue = this.getMagnitude().getMinValue();
@@ -54,7 +88,6 @@ public class SensorDTO {
                 "El valor %s%s es menor que el minimo de %s%s", valor, unitOfMeasure, minValue, unitOfMeasure));
         }
 
-        return true;
     }
 
 

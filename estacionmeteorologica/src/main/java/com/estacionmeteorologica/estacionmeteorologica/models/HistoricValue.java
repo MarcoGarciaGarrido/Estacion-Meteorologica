@@ -16,7 +16,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+/**
+ * Entidad que representa el valor histórico
+ * de Sensor, en una fecha determinada 
+ */
 @Entity
 @Table(name="historic_value")
 @AllArgsConstructor
@@ -24,18 +27,29 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HistoricValue {
-    
+    /**
+     * Id del valor histórico
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     *  Sensor enlazado al HistoricValue
+     */
     @ManyToOne
     @JoinColumn(name = "sensor_id")
     private Sensor sensor;
 
+     /**
+     * Valor del HistoricValue
+     */
     @Column(name = "valor", nullable = false)
     private float valor;
 
+    /**
+     * Fecha de medición del HistoricValue
+     */
     @Column(name="measure_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date measureDate;

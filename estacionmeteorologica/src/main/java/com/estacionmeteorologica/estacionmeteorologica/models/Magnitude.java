@@ -1,5 +1,8 @@
 package com.estacionmeteorologica.estacionmeteorologica.models;
 
+/**
+ * Entidad que representa a las Magnitudes
+ */
 public enum Magnitude {
 
     CELSIOUS(){
@@ -67,7 +70,21 @@ public enum Magnitude {
         }
     };
 
+    /**
+     * Unidad de medida de las magnitudes
+     * @return unidad de medida
+     */
     public abstract String getUnitOfMeasure();
+
+    /**
+     * Valor mínimo de cada Magnitud
+     * @return valor mínimo
+     */
     public abstract Float getMinValue();
+    
+    /**
+     * Valor máximo de cada Magnitud
+     * @return valor máximo
+     */
     public abstract Float getMaxValue();
 }

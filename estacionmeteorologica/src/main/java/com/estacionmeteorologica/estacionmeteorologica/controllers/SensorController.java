@@ -20,19 +20,29 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+/**
+ * Controlador de Sensor
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/sensores")
 public class SensorController {
 
     private final SensorService sensorService;
-
+    /**
+     * Método encargado de listar todos los sensores
+     * @return Lista con todos los sensores
+     */
     @GetMapping
     public ResponseEntity<Iterable<Sensor>> sensorList(){
         return new ResponseEntity<>(sensorService.getAllSensors(), HttpStatus.OK);
     }
 
+    /**
+     * Método encargado de obtener un sensor en base al id
+     * @param id id del sensor
+     * @return devuelve el sensor
+     */
     @GetMapping("/{idSensor}")
     public ResponseEntity<?> getValueFromSensor(@PathVariable("idSensor") Long id) {
         try {
@@ -44,6 +54,12 @@ public class SensorController {
         }
     }
 
+    /**
+     * Método encargado de crear el sensor
+     * @param sensorDTO DTO con los valores, para crear el sensor
+     * @param bindingResult 
+     * @return sensor creado
+     */
     @PostMapping
     public ResponseEntity<?> createSensor(@Valid @RequestBody SensorDTO sensorDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
@@ -56,6 +72,12 @@ public class SensorController {
         }
     }
 
+    /**
+     * Método encargado de borrar un sensor en por id
+     * @param id id del sensor a borrar
+     * @return devuelve una respuesta Http completa, con errores 
+     * en caso de no haber sido eliminada
+     */
     @DeleteMapping("/{idSensor}")
     public ResponseEntity<?> deleteSensor(@PathVariable("idSensor") Long id) {
         try {

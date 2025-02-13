@@ -17,6 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entidad que representa a los Sensores
+ */
 @Entity
 @Table(name="sensor")
 @NoArgsConstructor
@@ -24,16 +27,30 @@ import lombok.Setter;
 @Setter
 public class Sensor {
   
+    /**
+     * Id del sensor
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Magnitud asociada al sensor
+     */
     @Enumerated(EnumType.STRING)
     private Magnitude magnitude;
 
+    /**
+     * Valor actual del sensor
+     */
     @Column(name = "valor")
     private float valor;
 
+    /**
+     * Historico de valores asociado a cada sensor
+     * en caso de ser eliminado el sensor, estos
+     * también serán eliminado
+     */
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoricValue> historicValues;
 
@@ -52,6 +69,14 @@ public class Sensor {
         this.valor = valor;
     }
 
+    /**
+     * Método encargado de generar un valor comprendido
+     * entre el máximo y el mínimo de la magnitud correspondiente
+     * del Sensor
+     * 
+     * @return valor aleatorio comprendido entre el máximo y el mínimo
+     *  de la magnitud
+     */
     public float generateValue() {
         return new Random().nextFloat(this.magnitude.getMinValue(), this.magnitude.getMaxValue());
     }

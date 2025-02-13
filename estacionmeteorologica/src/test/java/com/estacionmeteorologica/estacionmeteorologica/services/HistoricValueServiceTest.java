@@ -26,7 +26,9 @@ import com.estacionmeteorologica.estacionmeteorologica.models.HistoricValue;
 import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
 import com.estacionmeteorologica.estacionmeteorologica.repository.HistoricValueRepository;
 import com.estacionmeteorologica.estacionmeteorologica.services.historicValue.HistoricValueService;
-
+/**
+ * Clase encargada de las pruebas de {@link HistoricValueService}
+ */
 @DisplayName("HistoricValueService Service Test")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +46,10 @@ public class HistoricValueServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Test encargado de verificar que se obtiene un historico de valores
+     * de un sensor entre dos fechas determinadas
+     */
     @Test
     public void testGetHistoricValuesBySensorIdAndMeasureDateBetween() {
 
@@ -101,8 +107,12 @@ public class HistoricValueServiceTest {
         verify(historicValueRepository, times(1)).findBySensorIdAndMeasureDateBetween(idSensor, initialMeasureDate, finalMeasureDate);
     }
 
+    /**
+     * Test encargado de verificar que se obtiene correctamente el histórico
+     * de valores
+     */
     @Test
-    void testGetHistoricValues_WithData() {
+    void testGetHistoricValues() {
         Long id = 1L;
         List<Float> expectedValues = Arrays.asList(20.5f, 30.2f, 25.8f);
 
@@ -119,6 +129,11 @@ public class HistoricValueServiceTest {
         verify(historicValueRepository, times(1)).getHistoricValues(id);
     }
 
+
+    /**
+     * Test encargado de verificar que se obtiene correctamente el histórico
+     * de valores de un id concreto
+     */
     @Test
     void testGetHistoricValuesBySensorId() {
         Long idSensor = 1L;        
@@ -141,6 +156,10 @@ public class HistoricValueServiceTest {
         verify(historicValueRepository, times(1)).findBySensorId(idSensor);
     }
 
+    /**
+     * Test encargado de comprobar que se eliminan corectamente los Historicvalues
+     * de un sensor por id
+     */
     @Test
     void testDeleteHistoricValuesWithSensorId() {
         Long idSensor = 1L;

@@ -27,6 +27,9 @@ import com.estacionmeteorologica.estacionmeteorologica.models.Sensor;
 import com.estacionmeteorologica.estacionmeteorologica.services.sensor.SensorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Clase encargada de las pruebas de {@link SensorController}
+ */
 @DisplayName("Sensor Controller Test")
 @WebMvcTest(SensorController.class)
 @AutoConfigureMockMvc
@@ -46,6 +49,12 @@ public class SensorControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new SensorController(sensorService)).build();
     }
 
+    /**
+     * Prueba para verificar que la consulta de sensores, se ejecuta
+     * como debería
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSensorList() throws Exception{
 
@@ -56,6 +65,11 @@ public class SensorControllerTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(3)));
     }
 
+    /**
+     * Test encargado de comprobar que se obtiene como se debería
+     * el sersor por el id
+     * @throws Exception
+     */
     @Test
     public void testGetValueFromSensor() throws Exception{
         Sensor sensor = new Sensor(1l);
@@ -67,9 +81,13 @@ public class SensorControllerTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$").value(sensor.getValor()));
     }
     
+    /**
+     * Test para comprobar que se crea correctamente un sensor
+     * @throws Exception
+     */
     @Test
     public void testCreateSensor() throws Exception{
-        SensorDTO sensorDTO = new SensorDTO(Magnitude.PREASURE, 100f);
+        SensorDTO sensorDTO = new SensorDTO(Magnitude.PREASURE, 1000f);
         Sensor sensor = new Sensor(Magnitude.PREASURE, 100f);
 
         BDDMockito.given(sensorService.createSensor(any(SensorDTO.class))).willReturn(sensor);
@@ -82,6 +100,11 @@ public class SensorControllerTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$.valor").value(sensor.getValor()));
     }
 
+    /**
+     * Test encargado de revisar que se elimina correctamente el sensor en 
+     * base a un id
+     * @throws Exception
+     */
     @Test
     public void testDeleteSensor() throws Exception{
         Long id = 1l;
