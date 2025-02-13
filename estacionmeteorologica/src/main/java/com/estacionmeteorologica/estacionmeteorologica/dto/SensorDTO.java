@@ -24,7 +24,7 @@ public class SensorDTO {
 
     public SensorDTO(@NotNull(message = "El campo de Magnitud es requerido") Magnitude magnitude, float valor) {
         this.magnitude = magnitude;
-        this.valor = valor;
+        this.setValor(valor);
     }
 
     public Sensor extractSensor() {
@@ -34,5 +34,29 @@ public class SensorDTO {
         
         return sensor;
     }
+
+    public void setValor(float valor) {
+        validValor(valor);
+        this.valor = valor;
+    }
+
+    public boolean validValor(float valor) {
+
+        float maxValue = this.getMagnitude().getMaxValue();
+        float minValue = this.getMagnitude().getMinValue();
+        String unitOfMeasure = this.getMagnitude().getUnitOfMeasure();
+
+        if (valor > maxValue) {
+            throw new IllegalArgumentException(String.format(
+                "El valor %s%s supera el maximo valor de %s%s", valor, unitOfMeasure, maxValue, unitOfMeasure));
+        } else if (valor < minValue) {
+            throw new IllegalArgumentException(String.format(
+                "El valor %s%s es menor que el minimo de %s%s", valor, unitOfMeasure, minValue, unitOfMeasure));
+        }
+
+        return true;
+    }
+
+
     
 }
